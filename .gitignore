@@ -5,21 +5,62 @@ dist/
 venv/
 env/
 
+# Local environment and secrets
+.env
+.env.*
+*.local
+.python-version
+.envrc
+
 __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.hypothesis/
+.tox/
+.nox/
+.cache/
+.ipynb_checkpoints/
 
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.temp
+*.bak
+*.log
 
 *.pyc
 *.pyo
 *.pyd
 *.egg-info/
+pip-wheel-metadata/
+wheelhouse/
 
 .coverage
+.coverage.*
 htmlcov/
+coverage.xml
 
 .idea/
 .vscode/
+
+# Submission-period protection (generated/raw/private artifacts)
+artifacts/
+outputs/
+experiments/
+checkpoints/
+data/raw/
+data/interim/
+data/processed/
+manuscript_drafts/
+submission_materials/
+
+# Packaged exports
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.rar
