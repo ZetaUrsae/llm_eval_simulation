@@ -30,8 +30,6 @@ Thumbs.db
 *.temp
 *.bak
 *.log
-*.ps1
-*.cmd
 
 *.pyc
 *.pyo
@@ -47,7 +45,6 @@ coverage.xml
 
 .idea/
 .vscode/
-scripts/.auto_sync_runner.cmd
 
 # Submission-period protection (generated/raw/private artifacts)
 artifacts/
