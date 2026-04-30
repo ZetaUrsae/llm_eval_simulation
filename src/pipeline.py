@@ -150,11 +150,17 @@ def run_pipeline(enable_monte_carlo: bool = False) -> Path:
             summary_lines.append(log_df.to_string(index=False))
 
         consensus_models = greedy_subset
+        theta_con = float(layer2_result.get("theta_con", config.THETA_CON))
         if not consensus_models and exhaustive_best["size"] >= 3:
-            consensus_models = exhaustive_best["models"]
-            summary_lines.append(
-                "Greedy subset did not meet threshold; fallback to exhaustive best subset."
-            )
+            if float(exhaustive_best.get("w", 0.0)) >= theta_con:
+                consensus_models = exhaustive_best["models"]
+                summary_lines.append(
+                    "Greedy subset did not meet threshold; fallback to exhaustive best subset."
+                )
+            else:
+                summary_lines.append(
+                    "Greedy subset did not meet threshold; exhaustive best subset also below threshold."
+                )
 
         if len(consensus_models) == 0:
             summary_lines.append(

@@ -68,8 +68,16 @@ def generate_density_decision_matrix(
     else:
         kde_fit_points = scaled_points
 
-    kde = gaussian_kde(kde_fit_points)
-    density_values = kde(scaled_points)
+    density_method = "kde"
+    try:
+        kde = gaussian_kde(kde_fit_points)
+        density_values = kde(scaled_points)
+    except Exception:
+        # Fallback for near-singular covariance cases: use inverse distance to center.
+        squared_distance = np.sum(np.square(scaled_points), axis=0)
+        density_values = 1.0 / (1.0 + squared_distance)
+        density_method = "distance_fallback"
+
     low_cutoff = float(np.quantile(density_values, 0.20))
     high_cutoff = float(np.quantile(density_values, 0.80))
 
@@ -101,6 +109,7 @@ def generate_density_decision_matrix(
     density_df.loc[insuff_mask, "quadrant"] = "数据不足"
     density_df.loc[insuff_mask, "action_label"] = "数据不足，需人工评估"
     density_df["decision_method"] = "density_kde"
+    density_df["density_method"] = density_method
     density_df["scheme_name"] = scheme_label
     density_df["density_q20"] = low_cutoff
     density_df["density_q80"] = high_cutoff
