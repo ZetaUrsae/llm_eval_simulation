@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Simulation framework for multi-model LLM evaluation governance in LIS contexts."
 readme = "ReadMe.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
 authors = [
   { name = "ZetaUrsae" }
 ]

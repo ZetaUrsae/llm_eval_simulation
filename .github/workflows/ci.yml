@@ -31,3 +31,6 @@ jobs:
         run: |
           python main.py --help
           python -m src.small_scale_experiment --help
+
+      - name: Run smoke tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v

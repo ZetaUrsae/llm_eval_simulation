@@ -6,7 +6,6 @@ from . import (
     data_simulator,
     density_quadrant,
     monte_carlo,
-    pipeline,
     threshold_sensitivity,
     visualizations,
 )

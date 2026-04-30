@@ -100,6 +100,11 @@ The `results/` directory is intentionally ignored by git so the public repositor
 - The root entrypoint now delegates to `src.pipeline`, which makes the project easier to test, package, and reuse.
 - Output directories are resolved from the project root instead of the current working directory, which prevents misplaced artifacts when running from another shell location.
 - CI configuration is included for lightweight install and import checks on GitHub Actions.
+- A minimal smoke test suite is included under `tests/` for fast repository sanity checks.
+
+## License
+
+This project is released under the MIT License. See the `LICENSE` file for details.
 
 ## Validity Caveats
 
