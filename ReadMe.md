@@ -117,3 +117,12 @@ This project is released under the MIT License. See the `LICENSE` file for detai
 ## Publishing
 
 The repository already has an `origin` remote configured. For a clean public upload workflow, see `docs/GITHUB_PUBLISH.md`.
+
+## Community Files
+
+This public repository also includes standard community health files:
+
+- `CONTRIBUTING.md`
+- `CODE_OF_CONDUCT.md`
+- `SECURITY.md`
+- issue and pull request templates under `.github/`
