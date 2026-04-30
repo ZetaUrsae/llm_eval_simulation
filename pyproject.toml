@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-eval-simulation"
+version = "0.1.0"
+description = "Simulation framework for multi-model LLM evaluation governance in LIS contexts."
+readme = "ReadMe.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "ZetaUrsae" }
+]
+dependencies = [
+  "joblib",
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "pingouin",
+  "python-docx",
+  "scikit-learn",
+  "scipy",
+  "seaborn"
+]
+
+[project.scripts]
+llm-eval-sim = "src.pipeline:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"

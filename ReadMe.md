@@ -1,150 +1,114 @@
 # llm_eval_simulation
 
-A simulation project for methodology research on multi-model LLM evaluation governance in Library and Information Science (LIS).
+Methodology-oriented simulation framework for multi-model LLM evaluation governance in Library and Information Science (LIS).
 
-## Project Scope And Status
+## Overview
 
-- Scope: simulation experiments for a decision-matrix-oriented evaluation governance paper.
-- Progress: core experiments are largely complete.
-- Current focus: manuscript writing and consolidation of publication-ready evidence.
+This repository implements a four-layer decision pipeline for situations where many LLM evaluators score the same collection candidates and the goal is to turn those scores into auditable governance decisions.
 
-## What This Project Solves
+The framework is designed as a decision-governance workflow rather than a predictive classifier. It separates evaluator reliability, group consensus, decision partitioning, and optional skill diagnosis into explicit stages.
 
-The project implements a four-layer decision framework to:
+## Core Workflow
 
-1. screen reliable evaluators,
-2. aggregate a high-consensus evaluator subset,
-3. produce actionable nine-quadrant decisions,
-4. optionally diagnose disputed items by skill dimensions.
+1. Layer 1: reliability screening with ICC and confidence-interval-aware boundary retention.
+2. Layer 2: consensus subset search with Kendall's W, greedy disagreement removal, and MDS diagnostics.
+3. Layer 3: nine-quadrant decision matrix using median score plus rank IQR majority-consensus dispersion.
+4. Layer 4: optional skill-level diagnosis for disputed books.
 
-The framework is positioned as a **decision governance tool** rather than an optimal classifier.
+## Current Scale
 
-## Four-Layer Framework
+- 10,000 simulated books
+- 100 evaluators grouped into 10 stress-test cohorts
+- 2 independent scoring rounds
+- 5 LIS-oriented diagnosis dimensions
 
-1. **Layer 1 (Reliability)**
-	- ICC(2,1)-based evaluator screening with CI-assisted boundary handling.
-2. **Layer 2 (Consensus)**
-	- Kendall's W thresholding (`theta_con=0.80`) with greedy disagreement removal and MDS diagnostics.
-3. **Layer 3 (Decision Matrix)**
-	- Median score + rank IQR (`Q3-Q1`) majority-consensus dispersion.
-	- Default percentile partitioning is `20/40/40`.
-4. **Layer 4 (Optional Diagnosis)**
-	- Skill-level diagnosis for disputed books:
-	  - Scholarly Value
-	  - Topical Relevance
-	  - Readability
-	  - Authority/Credibility
-	  - Collection Fit
+## Repository Layout
 
-## Experiment Scale
+```text
+.
+|-- main.py                     # Thin root entrypoint
+|-- requirements.txt           # Runtime dependencies
+|-- scripts/                   # Utility scripts such as DOCX generation
+|-- src/                       # Core package modules and pipeline orchestration
+|-- docs/                      # Structure and GitHub publishing documentation
+`-- results/                   # Generated artifacts (ignored by git)
+```
 
-- `10,000` books
-- `100` evaluators in `10` stress-test groups (A-J)
-- `2` independent scoring rounds
+Additional structure notes are available in `docs/PROJECT_STRUCTURE.md`.
 
-## Key Current Results
+## Quick Start
 
-- Layer 1 retained `90` evaluators.
-- Layer 2 retained `85` evaluators at `W=0.801`.
-- Layer 3 (default percentile + IQR) produced `1,887` high-score/high-consensus recommendations.
-- Bootstrap (1,000 rounds) shows high partition stability (`20/40/40` mean stability `0.9858`).
-- Monte Carlo (10 seeds) shows low volatility (final `W` mean `0.8065`, SD `0.0031`).
-
-## Installation
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Main Run
+Run the main pipeline:
 
 ```bash
 python main.py
 ```
 
-## Small-Scale Scenarios (3 / 6 / 9 Models)
+Run the main pipeline with Monte Carlo robustness analysis:
 
-Run the practical small-scale experiments with 10,000 books for each scenario:
+```bash
+python main.py --monte-carlo
+```
+
+## Other Entry Points
+
+Small-scale scenarios:
 
 ```bash
 python -m src.small_scale_experiment
 ```
 
-Outputs are written to:
-
-- `results/small_scale/small_scale_scenario1_report.txt`
-- `results/small_scale/small_scale_scenario2_report.txt`
-- `results/small_scale/small_scale_scenario3_report.txt`
-- `results/small_scale/small_scale_scenario1_decision_matrix.csv`
-- `results/small_scale/small_scale_scenario2_decision_matrix.csv`
-- `results/small_scale/small_scale_scenario3_decision_matrix.csv`
-- `results/small_scale/small_scale_scenario1_decision_scatter.png`
-- `results/small_scale/small_scale_scenario2_decision_scatter.png`
-- `results/small_scale/small_scale_scenario3_decision_scatter.png`
-- `results/reports/small_scale_comparison_report.txt`
-
-## ICC(2,1) vs ICC(3,1) Comparison Experiment
-
-Run one-click ICC comparison on the same simulated dataset (seed=42):
+ICC(2,1) vs ICC(3,1) comparison:
 
 ```bash
 python -m src.icc_comparison_experiment
 ```
 
-Key output:
-
-- `results/reports/icc_comparison_report.txt`
-- `results/icc_comparison/model_icc_comparison.csv`
-- `results/icc_comparison/layer1_pass_mismatch.csv`
-- `results/icc_comparison/layer23_metrics_comparison.csv`
-
-Outputs are written under `results/` with structured subfolders:
-
-- `results/layer1`
-- `results/layer2`
-- `results/layer3`
-- `results/layer4`
-- `results/sensitivity`
-- `results/bootstrap`
-- `results/monte_carlo`
-- `results/reports`
-
-## Alternative Layer-3 Methods Benchmark
+Alternative Layer-3 method benchmark:
 
 ```bash
 python -c "from src.alternative_methods import run_alternative_methods_report; run_alternative_methods_report()"
 ```
 
-This writes:
-
-- `results/reports/alternative_methods_report.txt`
-- charts under `results/alternative/`
-
-## Generate SSCI Manuscript Draft (DOCX)
+Generate manuscript draft DOCX:
 
 ```bash
 python scripts/generate_manuscript_docx.py
 ```
 
-Output file:
+## Main Outputs
 
-- `results/reports/manuscript_draft.docx`
-
-## Important Reports
+Generated artifacts are written under `results/`, including:
 
 - `results/reports/summary_report.txt`
 - `results/reports/bootstrap_report.txt`
 - `results/reports/sensitivity_report.txt`
 - `results/reports/monte_carlo_report.txt`
-- `results/reports/final_assessment_report.txt`
+- `results/reports/icc_comparison_report.txt`
 - `results/reports/alternative_methods_report.txt`
 
-## Notes on Validity
+The `results/` directory is intentionally ignored by git so the public repository stays lightweight and reproducible.
 
-Known caveats documented in reports and manuscript draft:
+## Engineering Notes
+
+- The root entrypoint now delegates to `src.pipeline`, which makes the project easier to test, package, and reuse.
+- Output directories are resolved from the project root instead of the current working directory, which prevents misplaced artifacts when running from another shell location.
+- CI configuration is included for lightweight install and import checks on GitHub Actions.
+
+## Validity Caveats
 
 1. Reliability is not validity.
-2. Greedy pruning may remove coherent minority schools.
-3. Quantile boundaries are distribution-relative.
-4. Density and percentile methods encode different decision viewpoints.
-5. Synthetic stress tests still require external validation.
+2. Greedy pruning can exclude coherent minority schools.
+3. Quantile partitions are distribution-relative.
+4. Density and percentile methods encode different governance viewpoints.
+5. Synthetic stress tests still require external validation on real datasets.
+
+## Publishing
+
+The repository already has an `origin` remote configured. For a clean public upload workflow, see `docs/GITHUB_PUBLISH.md`.

@@ -5,3 +5,5 @@ pingouin
 scikit-learn
 matplotlib
 seaborn
+joblib
+python-docx

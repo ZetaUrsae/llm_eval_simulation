@@ -36,7 +36,8 @@ SKILLS: List[str] = [
 ]
 N_SKILLS: int = 5
 
-RESULTS_DIR: Path = Path("results")
+PROJECT_ROOT: Path = Path(__file__).resolve().parents[1]
+RESULTS_DIR: Path = PROJECT_ROOT / "results"
 RESULTS_SUBDIRS: Dict[str, str] = {
     "layer1": "layer1",
     "layer2": "layer2",
